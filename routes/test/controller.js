@@ -1,7 +1,8 @@
 const { Router } = require("express");
 
-module.exports = (service) => {
+module.exports = (svLoc) => {
   const router = Router();
+  const service = svLoc.get(`testService`);
 
   // get
   router.get("/test", async (req, res, next) => {

@@ -9,12 +9,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-const dbFactory = require("./db");
-const db = dbFactory("./levdb");
+const svcLoc = require("./modules/serviceLoacator")();
 
-const routerFactory = require("./routes");
-const routers = routerFactory(db);
+svcLoc.register("dbName", "levdb");
+svcLoc.factory("db", require("./db"));
+svcLoc.factory("router", require("./routes"));
 
-app.use("/api", routers);
+app.use("/api", svcLoc.get("router"));
 
 module.exports = app;

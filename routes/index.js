@@ -1,17 +1,19 @@
 const filenames = require("../modules/filenames");
 const { Router } = require("express");
 
-module.exports = (db) => {
+module.exports = (svLoc) => {
   const router = Router();
-
+  const _svLoc = svLoc;
   const routerNames = filenames(__dirname);
 
   routerNames.map((routerName) => {
-    const serviceFactory = require(`./${routerName}/services`);
-    const controllerFactory = require(`./${routerName}/controller.js`);
+    _svLoc.factory(`${routerName}Service`, require(`./${routerName}/service`));
+    _svLoc.factory(
+      `${routerName}Controller`,
+      require(`./${routerName}/controller.js`)
+    );
 
-    const service = serviceFactory(db);
-    const controller = controllerFactory(service);
+    const controller = _svLoc.get(`${routerName}Controller`);
     router.use(controller);
   });
   return router;

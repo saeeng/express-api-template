@@ -1,5 +1,6 @@
 const level = require("level");
 
-module.exports = (dbName) => {
+module.exports = (serviceLocator) => {
+  const dbName = serviceLocator.get("dbName");
   return level(dbName);
 };

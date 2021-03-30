@@ -1,12 +1,12 @@
 const filenames = require("../../../modules/filenames");
 const serviceNames = filenames(__dirname);
 
-module.exports = (db) => {
+module.exports = (svLoc) => {
   const serviceModule = {};
-
+  const db = svLoc.get("db");
   serviceNames.map((serviceName) => {
-    const serviceFactory = require(`./${serviceName}`);
-    serviceModule[serviceName] = serviceFactory(db);
+    const submoduleFactory = require(`./${serviceName}`);
+    serviceModule[serviceName] = submoduleFactory(db);
   });
 
   return serviceModule;

@@ -1,26 +1,29 @@
-const { Router } = require("express");
-
-module.exports = (service) => {
-  const router = Router();
-
+module.exports = (testService, router, wrapAsync) => {
+  const _router = router;
   // get
-  router.get("/test", async (req, res, next) => {
-    const [status, result] = await service.getTest(req.query.key);
-    res.status(status).send(result);
-  });
+  _router.get(
+    "/test",
+    wrapAsync(async (req, res, next) => {
+      const [status, result] = await testService.getTest(req.query.key);
+      res.status(status).send(result);
+    })
+  );
 
   // post
-  router.post("/test", async (req, res, next) => {
-    const [status, result] = await service.addTest(
-      req.body.key,
-      req.body.value
-    );
-    res.status(status).send(result);
-  });
+  _router.post(
+    "/test",
+    wrapAsync(async (req, res, next) => {
+      const [status, result] = await testService.addTest(
+        req.body.key,
+        req.body.value
+      );
+      res.status(status).send(result);
+    })
+  );
 
   //put
 
   //delete
 
-  return router;
+  return _router;
 };
